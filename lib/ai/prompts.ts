@@ -72,3 +72,45 @@ ${webContent}
 
 Extract the company metadata and provide the JSON output.
 `;
+
+export const COMPANY_EXTRACTION_SYSTEM_PROMPT = `
+You are a Lead Intelligence Specialist. Your task is to identify the PRIMARY company mentioned in a news headline or job post.
+
+RULES:
+1. Extract the specific company name (e.g., "Vercel", "Respond.io").
+2. If the headline is generic or doesn't mention a specific company, return {"companyName": null}.
+3. If the extracted name is a common word (e.g., "It", "Probably", "AI"), ensure it is actually the name of a business entity.
+4. Clean the name: Remove legal suffixes (LLC, Inc) unless necessary for identification.
+
+OUTPUT FORMAT:
+{
+  "companyName": "string | null"
+}
+`;
+
+export const getExtractionUserPrompt = (title: string) => `
+EXTRACT COMPANY FROM TITLE:
+Title: ${title}
+
+Identify the primary company and provide the JSON output.
+`;
+
+export const REASONING_SYSTEM_PROMPT = `
+You are a Lead Intelligence Strategist. Your task is to explain why a company has been assigned a specific Buying Intent Score.
+
+You will be provided with a score breakdown and a list of recent signals.
+Your explanation must be 1-2 concise sentences.
+It must ground the score in the signals (e.g., "Score driven by recent $10M Series A and aggressive engineering hiring").
+DO NOT mention the specific mathematical weights or "caps". Focus on the business reality.
+`;
+
+export const getReasoningUserPrompt = (breakdown: any, recentSignals: any[]) => `
+INTENT SCORE REASONING REQUEST:
+Total Score: ${breakdown.totalScore}
+Breakdown: ${JSON.stringify(breakdown)}
+
+RECENT SIGNALS:
+${recentSignals.map(s => `- [${s.classification}] ${s.summary}`).join("\n")}
+
+Provide a 1-2 sentence explanation for this score.
+`;
