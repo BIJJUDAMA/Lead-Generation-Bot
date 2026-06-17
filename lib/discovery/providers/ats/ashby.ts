@@ -1,4 +1,4 @@
-import { DiscoveryProvider, RawSignal } from "../types";
+import { DiscoveryProvider, RawSignal } from "../../types";
 
 export class AshbyProvider implements DiscoveryProvider {
   name = "Ashby_Hiring";
