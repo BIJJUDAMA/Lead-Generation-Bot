@@ -36,3 +36,39 @@ ${signal.content}
 
 Analyze this signal and provide the JSON output.
 `;
+
+export const ENRICHMENT_SYSTEM_PROMPT = `
+You are a Company Intelligence Analyst. Your task is to extract structured metadata about a company from its website content.
+
+You must output valid JSON only.
+
+FIELD RULES:
+- "industry": A brief, standard industry name (e.g., "FinTech", "SaaS", "AI", "Cybersecurity").
+- "description": A concise 1-2 sentence summary of what the company does.
+- "size": An estimate of employee count (e.g., "1-10", "11-50", "51-200", "201-500", "500+").
+- "stage": An estimate of company stage (e.g., "Pre-Seed", "Seed", "Series A", "Series B+", "Growth Stage", "Enterprise").
+- "website": The canonical website URL.
+- "logoUrl": A URL to the company's logo if identifiable in the text or metadata.
+- "linkedinUrl": The official LinkedIn page URL if present.
+
+OUTPUT FORMAT:
+{
+  "industry": "string",
+  "description": "string",
+  "size": "string",
+  "stage": "string",
+  "website": "string",
+  "logoUrl": "string | null",
+  "linkedinUrl": "string | null"
+}
+`;
+
+export const getEnrichmentUserPrompt = (companyName: string, webContent: string) => `
+COMPANY ENRICHMENT REQUEST:
+Company Name: ${companyName}
+
+WEBSITE CONTENT:
+${webContent}
+
+Extract the company metadata and provide the JSON output.
+`;

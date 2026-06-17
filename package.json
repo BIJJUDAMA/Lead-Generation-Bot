@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "discovery:test": "npx tsx lib/discovery/test-ingestion.ts",
-    "analysis:test": "npx tsx lib/ai/test-analysis.ts"
+    "analysis:test": "npx tsx lib/ai/test-analysis.ts",
+    "enrichment:test": "npx tsx lib/enrichment/test-enrichment.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.4",

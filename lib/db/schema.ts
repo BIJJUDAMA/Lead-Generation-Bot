@@ -9,6 +9,8 @@ export const companies = pgTable("companies", {
   description: text("description"),
   size: text("size"),
   stage: text("stage"),
+  logoUrl: text("logo_url"),
+  linkedinUrl: text("linkedin_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

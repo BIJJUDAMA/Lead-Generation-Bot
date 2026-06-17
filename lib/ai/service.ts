@@ -2,13 +2,23 @@ import { eq, isNull } from "drizzle-orm";
 import { db } from "../db";
 import { signals, signalAnalysis } from "../db/schema";
 import { aiConfig } from "./config";
-import { ANALYSIS_SYSTEM_PROMPT, getAnalysisUserPrompt } from "./prompts";
+import { ANALYSIS_SYSTEM_PROMPT, ENRICHMENT_SYSTEM_PROMPT, getAnalysisUserPrompt, getEnrichmentUserPrompt } from "./prompts";
 
 export interface AnalysisResult {
   classification: string;
   confidence: number;
   summary: string;
   reasoning: string;
+}
+
+export interface EnrichmentResult {
+  industry: string;
+  description: string;
+  size: string;
+  stage: string;
+  website: string;
+  logoUrl: string | null;
+  linkedinUrl: string | null;
 }
 
 export class AnalysisService {
@@ -68,6 +78,45 @@ export class AnalysisService {
       return result;
     } catch (error) {
       console.error(`Analysis failed for signal ${signalId}:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Extracts company metadata from web content using OpenRouter
+   */
+  static async extractCompanyMetadata(companyName: string, webContent: string): Promise<EnrichmentResult | null> {
+    try {
+      console.log(`Extracting metadata for company: ${companyName}...`);
+      
+      const response = await fetch(aiConfig.baseUrl + "/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${aiConfig.apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://github.com/Lead-Generation-Bot",
+          "X-Title": "Lead-Generation-Bot",
+        },
+        body: JSON.stringify({
+          model: aiConfig.model,
+          messages: [
+            { role: "system", content: ENRICHMENT_SYSTEM_PROMPT },
+            { role: "user", content: getEnrichmentUserPrompt(companyName, webContent) },
+          ],
+          response_format: { type: "json_object" },
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`OpenRouter API error: ${response.status} - ${error}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices[0].message.content;
+      return JSON.parse(content);
+    } catch (error) {
+      console.error(`Metadata extraction failed for ${companyName}:`, error);
       return null;
     }
   }
