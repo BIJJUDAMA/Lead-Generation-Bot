@@ -5,8 +5,8 @@ async function main() {
   const { AnalysisService } = await import("./service");
   console.log("--- Manual AI Analysis Test ---");
   
-  if (!process.env.OPENROUTER_API_KEY) {
-    console.error("OPENROUTER_API_KEY is missing in .env.local");
+  if (!process.env.GROQ_API_KEY) {
+    console.error("GROQ_API_KEY is missing in .env.local");
     process.exit(1);
   }
 
