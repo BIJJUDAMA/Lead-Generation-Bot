@@ -11,12 +11,14 @@
     "db:push": "drizzle-kit push",
     "discovery:test": "npx tsx lib/discovery/test-ingestion.ts",
     "analysis:test": "npx tsx lib/ai/test-analysis.ts",
-    "enrichment:test": "npx tsx lib/enrichment/test-enrichment.ts"
+    "enrichment:test": "npx tsx lib/enrichment/test-enrichment.ts",
+    "scoring:test": "npx tsx lib/scoring/test-scoring.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.4",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.33.0",
+    "framer-motion": "^12.40.0",
     "lucide-react": "^0.453.0",
     "next": "^15.0.0",
     "react": "^19.0.0",
@@ -28,6 +30,7 @@
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.5.0",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.24.0",
     "eslint": "^8.0.0",

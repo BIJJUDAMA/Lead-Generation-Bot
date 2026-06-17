@@ -7,8 +7,8 @@ async function main() {
   console.log("--- Company Enrichment Test ---");
   
   try {
-    // Process a few pending companies
-    await EnrichmentService.processPendingEnrichment(3);
+    // Process 10 pending companies
+    await EnrichmentService.processPendingEnrichment(10);
     
     console.log("--- Enrichment Test Finished ---");
     process.exit(0);

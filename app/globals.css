@@ -2,20 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #050505;
+    --surface: #0A0A0A;
+    --elevated: #111111;
+    --border: rgba(255, 255, 255, 0.06);
+    
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.55);
+    --text-muted: rgba(255, 255, 255, 0.35);
+    
+    /* Semantic Colors - Minimal & Functional */
+    --intent-high: #10B981;  /* Emerald 500 */
+    --intent-medium: #F59E0B; /* Amber 500 */
+    --intent-low: #EF4444;    /* Red 500 */
+    
+    --signal-funding: #A78BFA;  /* Purple 400 Muted */
+    --signal-hiring: #60A5FA;   /* Blue 400 Muted */
+    --signal-growth: #34D399;   /* Green 400 Muted */
+    --signal-expansion: #FB923C; /* Orange 400 Muted */
+    --signal-launch: #22D3EE;    /* Cyan 400 Muted */
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-[#050505] text-white antialiased selection:bg-white/10;
+  background-color: #050505;
+  letter-spacing: -0.015em;
+}
+
+/* Typography Hierarchy */
+.title-hero {
+  @apply text-[36px] font-bold tracking-tighter leading-tight;
+}
+
+.title-section {
+  @apply text-[20px] font-semibold tracking-tight;
+}
+
+.text-body {
+  @apply text-[15px] leading-relaxed;
+}
+
+.text-meta {
+  @apply text-[13px] font-medium;
+}
+
+/* Apple-style Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  border: 2px solid #050505;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Interaction Presets */
+.row-hover {
+  @apply transition-all duration-300 ease-out hover:bg-[#111111] hover:-translate-y-[1px];
+}
+
+.btn-hover {
+  @apply transition-all duration-200 hover:-translate-y-[1px] active:translate-y-0;
+}
+
+.search-focus {
+  @apply transition-all duration-300 focus:bg-[#0F0F0F] focus:border-white/10;
+}
+
+/* Layout Utilities */
+.surface-matte {
+  @apply bg-[#0A0A0A] border border-white/[0.06];
+}
+
+.surface-elevated {
+  @apply bg-[#111111] border border-white/[0.08];
 }

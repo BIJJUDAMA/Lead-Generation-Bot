@@ -2,13 +2,24 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, Settings, BarChart3 } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Users, 
+  BarChart3, 
+  Bookmark, 
+  Ban, 
+  Settings, 
+  UserCircle 
+} from "lucide-react";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
-  title: "Lead-Generation-Bot Dashboard",
-  description: "Internal AI-powered Lead Intelligence Platform",
+  title: "Intelligence",
+  description: "Internal Lead Generation Platform",
 };
 
 export default function RootLayout({
@@ -17,42 +28,64 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={cn(inter.className, "bg-gray-50 text-gray-900")}>
+    <html lang="en" className="dark">
+      <body className={cn(inter.className, "bg-[#050505] text-white antialiased")}>
         <div className="flex min-h-screen">
-          {/* Sidebar */}
-          <aside className="w-64 border-r bg-white flex flex-col fixed inset-y-0">
-            <div className="p-6 border-b">
-              <h1 className="text-xl font-bold text-blue-600">Lead-Generation-Bot</h1>
+          {/* macOS-style Matte Sidebar */}
+          <aside className="w-[260px] border-r border-white/[0.06] bg-[#050505] flex flex-col fixed inset-y-0 z-20">
+            {/* Sidebar Branding */}
+            <div className="p-10 pb-12">
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.4)]" />
+                <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-white/90">Lead Intelligence</span>
+              </div>
             </div>
-            <nav className="flex-1 p-4 space-y-2">
-              <a href="/" className="flex items-center space-x-3 p-2 bg-blue-50 text-blue-700 rounded-lg">
-                <LayoutDashboard className="h-5 w-5" />
-                <span className="font-medium">Dashboard</span>
-              </a>
-              <a href="#" className="flex items-center space-x-3 p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                <Users className="h-5 w-5" />
-                <span className="font-medium">Leads</span>
-              </a>
-              <a href="#" className="flex items-center space-x-3 p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                <BarChart3 className="h-5 w-5" />
-                <span className="font-medium">Analytics</span>
-              </a>
+            
+            {/* Primary Navigation */}
+            <nav className="flex-1 px-4 py-4 space-y-1">
+              <SidebarLink href="/" icon={LayoutDashboard} label="Dashboard" active />
             </nav>
-            <div className="p-4 border-t">
-              <a href="#" className="flex items-center space-x-3 p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                <Settings className="h-5 w-5" />
-                <span className="font-medium">Settings</span>
-              </a>
-            </div>
-          </aside>
+            </aside>
 
-          {/* Main Content */}
-          <main className="flex-1 ml-64 p-8">
-            {children}
+
+          {/* Clean Main Content (Matte Surface) */}
+          <main className="flex-1 ml-[260px] min-h-screen bg-[#0A0A0A]">
+            <div className="w-full">
+              {children}
+            </div>
           </main>
         </div>
       </body>
     </html>
+  );
+}
+
+function SidebarLink({ 
+  href, 
+  icon: Icon, 
+  label, 
+  active = false 
+}: { 
+  href: string, 
+  icon: any, 
+  label: string, 
+  active?: boolean 
+}) {
+  return (
+    <a 
+      href={href} 
+      className={cn(
+        "flex items-center space-x-3.5 px-4 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-200 group",
+        active 
+          ? "bg-white/[0.08] text-white shadow-inner" 
+          : "text-white/40 hover:bg-white/[0.04] hover:text-white/70"
+      )}
+    >
+      <Icon className={cn(
+        "h-[18px] w-[18px] transition-colors", 
+        active ? "text-white" : "text-white/30 group-hover:text-white/50"
+      )} />
+      <span>{label}</span>
+    </a>
   );
 }
