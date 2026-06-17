@@ -1,0 +1,9 @@
+# Standard Node/Next.js ignores
+node_modules/
+.next/
+out/
+build/
+.env*
+.DS_Store
+*.log
+*.tsbuildinfo
