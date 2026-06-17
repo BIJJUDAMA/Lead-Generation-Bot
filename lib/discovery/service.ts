@@ -40,16 +40,19 @@ export class DiscoveryService {
   }
 
   private async processRawSignal(raw: RawSignal) {
-    // 1. Deduplicate by URL if present
-    if (raw.url) {
-      const existing = await db.query.signals.findFirst({
-        where: (signals, { eq }) => eq(signals.url, raw.url!),
-      });
-      if (existing) return;
-    }
+    // 1. Deduplicate by URL or Company Name + Signal Content
+    const existing = await db.query.signals.findFirst({
+      where: (signals, { eq, and }) => 
+        raw.url 
+          ? eq(signals.url, raw.url) 
+          : and(
+              eq(signals.source, raw.source),
+              eq(signals.content, raw.content)
+            ),
+    });
+    if (existing) return;
 
     // 2. Resolve Company (Find or Create by Name)
-    // In a real scenario, this would be more complex (domain matching, etc.)
     let company = await db.query.companies.findFirst({
       where: (companies, { eq }) => eq(companies.name, raw.companyName),
     });

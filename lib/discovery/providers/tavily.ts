@@ -1,4 +1,5 @@
 import { DiscoveryProvider, RawSignal } from "../types";
+import { AnalysisService } from "../../ai/service";
 
 export class TavilyProvider implements DiscoveryProvider {
   name = "Tavily_Search";
@@ -50,7 +51,8 @@ export class TavilyProvider implements DiscoveryProvider {
         }
 
         for (const result of data.results) {
-          const companyName = this.extractCompanyName(result.title);
+          // Use AI to extract company name reliably
+          const companyName = await AnalysisService.extractCompanyName(result.title);
           
           if (companyName) {
             allSignals.push({
@@ -75,32 +77,5 @@ export class TavilyProvider implements DiscoveryProvider {
     if (query.includes("funding")) return "Funding";
     if (query.includes("expanding sales")) return "Hiring/Expansion";
     return "Growth";
-  }
-
-  private extractCompanyName(title: string): string | null {
-    // Simple heuristic: Often "Company Name raises..." or "Company Name closes..."
-    const verbs = ["raises", "closes", "announces", "secures", "gets", "lands", "launches", "expands", "opens", "hires", "appoints"];
-    const lowercaseTitle = title.toLowerCase();
-
-    for (const verb of verbs) {
-      const verbIndex = lowercaseTitle.indexOf(` ${verb} `);
-      if (verbIndex !== -1) {
-        let potentialName = title.substring(0, verbIndex).trim();
-        
-        // Clean up common prefixes and punctuation
-        potentialName = potentialName.replace(/^(Startup|Fintech|SaaS|AI|Crypto|New|Exclusive|Report|Breaking)\s+/i, "").trim();
-        potentialName = potentialName.replace(/^[:\-\|]\s+/, "").trim();
-
-        const words = potentialName.split(/\s+/);
-        if (words.length > 4) {
-          // Fallback to last word if it seems like a name (not a whole sentence)
-          return words[words.length - 1];
-        }
-
-        return potentialName;
-      }
-    }
-
-    return null;
   }
 }
