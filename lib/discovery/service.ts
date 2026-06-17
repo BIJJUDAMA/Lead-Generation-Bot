@@ -5,6 +5,7 @@ import { RSSProvider } from "./providers/rss";
 import { GreenhouseProvider } from "./providers/ats/greenhouse";
 import { LeverProvider } from "./providers/ats/lever";
 import { AshbyProvider } from "./providers/ats/ashby";
+import { TavilyProvider } from "./providers/tavily";
 
 export class DiscoveryService {
   private providers: DiscoveryProvider[] = [];
@@ -14,6 +15,7 @@ export class DiscoveryService {
     this.registerProvider(new GreenhouseProvider());
     this.registerProvider(new LeverProvider());
     this.registerProvider(new AshbyProvider());
+    this.registerProvider(new TavilyProvider());
   }
 
   registerProvider(provider: DiscoveryProvider) {
