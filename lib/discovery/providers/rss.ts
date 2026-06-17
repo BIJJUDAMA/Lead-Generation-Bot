@@ -50,17 +50,26 @@ export class RSSProvider implements DiscoveryProvider {
 
   private extractCompanyName(title: string): string | null {
     // Very simple heuristic: Often "Company Name raises..." or "Company Name closes..."
-    // We'll just take the first 1-3 words before common funding verbs
-    const fundingVerbs = ["raises", "closes", "announces", "secures", "gets", "lands"];
+    const fundingVerbs = ["raises", "closes", "announces", "secures", "gets", "lands", "launches"];
     const lowercaseTitle = title.toLowerCase();
 
     for (const verb of fundingVerbs) {
-      if (lowercaseTitle.includes(` ${verb} `)) {
-        const parts = title.split(new RegExp(`\\s${verb}\\s`, "i"));
-        if (parts[0]) {
-          // Clean up common prefixes like "Startup " or "Fintech "
-          return parts[0].replace(/^(Startup|Fintech|SaaS|AI|Crypto)\s+/i, "").trim();
+      const verbIndex = lowercaseTitle.indexOf(` ${verb} `);
+      if (verbIndex !== -1) {
+        let potentialName = title.substring(0, verbIndex).trim();
+        
+        // Clean up common prefixes
+        potentialName = potentialName.replace(/^(Startup|Fintech|SaaS|AI|Crypto|Malaysia’s AI agent-powered messaging app)\s+/i, "").trim();
+
+        // Heuristic: Company names are rarely more than 3-4 words in news titles
+        const words = potentialName.split(/\s+/);
+        if (words.length > 4) {
+          // If it's too long, take just the last 1-2 words if they are capitalized
+          // Or just return the last word as a fallback
+          return words[words.length - 1];
         }
+
+        return potentialName;
       }
     }
 
