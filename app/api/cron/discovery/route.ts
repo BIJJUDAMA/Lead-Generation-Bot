@@ -1,19 +1,27 @@
-import { NextRequest, NextResponse } from "next/server";
-import { discoveryService } from "@/lib/discovery/service";
+import { NextRequest, NextResponse } from 'next/server';
+import { discoveryService } from '@/lib/discovery/service';
+import { AnalysisService } from '@/lib/ai/service';
 
-export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get("authorization");
-  
-  // Security check for Vercel Cron
-  if (process.env.NODE_ENV === "production" && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new NextResponse("Unauthorized", { status: 401 });
+export const dynamic = 'force-dynamic';
+
+export async function GET(req: NextRequest) {
+  const authHeader = req.headers.get('authorization');
+  if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
+    console.log('[CRON] Starting Discovery & Analysis...');
+    
+    // 1. Run Discovery Providers
     await discoveryService.runDiscovery();
-    return NextResponse.json({ success: true, message: "Discovery run completed" });
+    
+    // 2. Process Pending Signals (Analyze raw text) - Reduced to 5 to avoid serverless timeout
+    await AnalysisService.processPendingSignals(5);
+
+    return NextResponse.json({ success: true, message: 'Discovery and Analysis complete' });
   } catch (error) {
-    console.error("Discovery run failed:", error);
-    return NextResponse.json({ success: false, error: "Discovery run failed" }, { status: 500 });
+    console.error('[CRON] Discovery failed:', error);
+    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
   }
 }
