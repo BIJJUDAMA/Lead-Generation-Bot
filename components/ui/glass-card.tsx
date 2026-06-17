@@ -4,9 +4,10 @@ interface GlassCardProps {
   children: React.ReactNode;
   className?: string;
   gradient?: "purple" | "cyan" | "orange";
+  onClick?: () => void;
 }
 
-export function GlassCard({ children, className, gradient }: GlassCardProps) {
+export function GlassCard({ children, className, gradient, onClick }: GlassCardProps) {
   const gradients = {
     purple: "from-purple-500/10 to-pink-500/10",
     cyan: "from-cyan-500/10 to-blue-500/10",
@@ -14,7 +15,9 @@ export function GlassCard({ children, className, gradient }: GlassCardProps) {
   };
 
   return (
-    <div className={cn(
+    <div 
+      onClick={onClick}
+      className={cn(
       "glass-card p-6 rounded-2xl relative overflow-hidden group",
       gradient && `bg-gradient-to-br ${gradients[gradient]}`,
       className
