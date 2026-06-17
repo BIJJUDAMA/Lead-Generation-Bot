@@ -38,6 +38,7 @@ export const signalAnalysis = pgTable("signal_analysis", {
   classification: text("classification"),
   confidence: numeric("confidence"),
   summary: text("summary"),
+  reasoning: text("reasoning"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
