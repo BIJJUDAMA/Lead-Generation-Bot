@@ -1,11 +1,8 @@
-import * as dotenv from "dotenv";
-dotenv.config({ path: ".env.local" });
+import { db } from "@/lib/db";
+import { companies } from "@/lib/db/schema";
+import { inArray } from "drizzle-orm";
 
-async function main() {
-  const { db } = await import("../db");
-  const { companies, signals, signalAnalysis } = await import("../db/schema");
-  const { sql, inArray, eq } = await import("drizzle-orm");
-
+export async function runCleanup() {
   console.log("--- Cleaning Garbage Data ---");
   
   const garbageNames = ["it", "AI", "Probably", "Competitor"];
@@ -26,12 +23,6 @@ async function main() {
   } else {
     console.log("No garbage companies found matching the list.");
   }
-  
-  // 2. Clear out any other pending companies that might be junk (optional but good for testing)
-  // For now we'll stick to the explicit list.
 
   console.log("--- Data Cleanup Finished ---");
-  process.exit(0);
 }
-
-main();
