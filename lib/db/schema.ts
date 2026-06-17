@@ -1,5 +1,5 @@
 import { pgTable, uuid, text, timestamp, numeric, integer, jsonb, index } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { sql, relations } from "drizzle-orm";
 
 export const companies = pgTable("companies", {
   id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -14,6 +14,14 @@ export const companies = pgTable("companies", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const companiesRelations = relations(companies, ({ one, many }) => ({
+  signals: many(signals),
+  intentScore: one(intentScores, {
+    fields: [companies.id],
+    references: [intentScores.companyId],
+  }),
+}));
 
 export const signals = pgTable("signals", {
   id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -32,6 +40,17 @@ export const signals = pgTable("signals", {
   };
 });
 
+export const signalsRelations = relations(signals, ({ one }) => ({
+  company: one(companies, {
+    fields: [signals.companyId],
+    references: [companies.id],
+  }),
+  analysis: one(signalAnalysis, {
+    fields: [signals.id],
+    references: [signalAnalysis.signalId],
+  }),
+}));
+
 export const signalAnalysis = pgTable("signal_analysis", {
   id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
   signalId: uuid("signal_id")
@@ -44,6 +63,13 @@ export const signalAnalysis = pgTable("signal_analysis", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const signalAnalysisRelations = relations(signalAnalysis, ({ one }) => ({
+  signal: one(signals, {
+    fields: [signalAnalysis.signalId],
+    references: [signals.id],
+  }),
+}));
+
 export const intentScores = pgTable("intent_scores", {
   id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
   companyId: uuid("company_id")
@@ -53,5 +79,13 @@ export const intentScores = pgTable("intent_scores", {
   totalScore: integer("total_score").notNull(),
   breakdown: jsonb("breakdown"),
   explanation: text("explanation"),
+  reasoning: text("reasoning"), // Added during Phase 5 but missed in some schema versions
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const intentScoresRelations = relations(intentScores, ({ one }) => ({
+  company: one(companies, {
+    fields: [intentScores.companyId],
+    references: [companies.id],
+  }),
+}));
