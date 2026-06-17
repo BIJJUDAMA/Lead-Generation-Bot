@@ -1,9 +1,8 @@
 import * as dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
-import { discoveryService } from "./service";
-
 async function main() {
+  const { discoveryService } = await import("./service");
   console.log("--- Manual Discovery Test ---");
   try {
     await discoveryService.runDiscovery();
