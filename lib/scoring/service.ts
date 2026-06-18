@@ -79,14 +79,14 @@ export class ScoringService {
       catSignals.forEach((signal, index) => {
         // Step-down points: if we have more signals than steps, use the last step value
         const basePoints = config.steps[index] || config.steps[config.steps.length - 1] || 0;
-        
+
         // Recency multiplier
         const isRecent = signal.createdAt >= ninetyDaysAgo;
         const multiplier = isRecent ? RECENCY_MULTIPLIER.recent : RECENCY_MULTIPLIER.stale;
-        
+
         // Incorporate AI confidence
         const confidence = parseFloat(signal.confidence || "0.5");
-        
+
         catScore += (basePoints * confidence) * multiplier;
       });
 
@@ -96,9 +96,14 @@ export class ScoringService {
       breakdown.totalScore += finalCatScore;
     }
 
-    // 4. Generate reasoning via AI
+    // 4. Normalize score to 0-100 scale
+    breakdown.totalScore = Math.min(100, Math.round(breakdown.totalScore / 4));
+
+
+
+    // 5. Generate reasoning via AI
     const reasoning = await AnalysisService.generateScoreReasoning(
-      breakdown, 
+      breakdown,
       analyzedSignals.slice(0, 5) // Send top 5 most recent signals for context
     );
 
@@ -111,16 +116,16 @@ export class ScoringService {
       reasoning: reasoning, // Explicitly set for dashboard use
       updatedAt: new Date()
     })
-    .onConflictDoUpdate({
-      target: intentScores.companyId,
-      set: {
-        totalScore: breakdown.totalScore,
-        breakdown: breakdown,
-        explanation: reasoning,
-        reasoning: reasoning,
-        updatedAt: new Date()
-      }
-    });
+      .onConflictDoUpdate({
+        target: intentScores.companyId,
+        set: {
+          totalScore: breakdown.totalScore,
+          breakdown: breakdown,
+          explanation: reasoning,
+          reasoning: reasoning,
+          updatedAt: new Date()
+        }
+      });
 
     console.log(`Score updated for ${company.name}: ${breakdown.totalScore}`);
     return breakdown;
@@ -136,7 +141,7 @@ export class ScoringService {
     for (const company of allCompanies) {
       await this.calculateCompanyScore(company.id);
     }
-    
+
     console.log("All scores processed.");
   }
 }
