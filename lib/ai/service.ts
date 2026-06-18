@@ -52,6 +52,8 @@ export class AnalysisService {
         headers: {
           "Authorization": `Bearer ${aiConfig.apiKey}`,
           "Content-Type": "application/json",
+          "HTTP-Referer": "https://github.com/Lead-Generation-Bot", // Required by OpenRouter
+          "X-Title": "Lead-Generation-Bot",
         },
         body: JSON.stringify({
           model: aiConfig.model,
@@ -65,7 +67,7 @@ export class AnalysisService {
 
       if (!response.ok) {
         const error = await response.text();
-        throw new Error(`AI API error: ${response.status} - ${error}`);
+        throw new Error(`OpenRouter API error: ${response.status} - ${error}`);
       }
 
       const data = await response.json();
@@ -99,6 +101,8 @@ export class AnalysisService {
         headers: {
           "Authorization": `Bearer ${aiConfig.apiKey}`,
           "Content-Type": "application/json",
+          "HTTP-Referer": "https://github.com/Lead-Generation-Bot",
+          "X-Title": "Lead-Generation-Bot",
         },
         body: JSON.stringify({
           model: aiConfig.model,
@@ -143,6 +147,8 @@ export class AnalysisService {
         headers: {
           "Authorization": `Bearer ${aiConfig.apiKey}`,
           "Content-Type": "application/json",
+          "HTTP-Referer": "https://github.com/Lead-Generation-Bot",
+          "X-Title": "Lead-Generation-Bot",
         },
         body: JSON.stringify({
           model: aiConfig.model,
@@ -156,7 +162,7 @@ export class AnalysisService {
 
       if (!response.ok) {
         const error = await response.text();
-        throw new Error(`AI API error: ${response.status} - ${error}`);
+        throw new Error(`OpenRouter API error: ${response.status} - ${error}`);
       }
 
       const data = await response.json();
@@ -220,6 +226,8 @@ export class AnalysisService {
         headers: {
           "Authorization": `Bearer ${aiConfig.apiKey}`,
           "Content-Type": "application/json",
+          "HTTP-Referer": "https://github.com/Lead-Generation-Bot",
+          "X-Title": "Lead-Generation-Bot",
         },
         body: JSON.stringify({
           model: aiConfig.model,

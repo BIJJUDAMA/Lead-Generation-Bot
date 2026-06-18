@@ -1,5 +1,5 @@
 export const aiConfig = {
-  apiKey: process.env.GROQ_API_KEY,
-  model: process.env.GROQ_MODEL || "llama-3.1-70b-versatile",
-  baseUrl: "https://api.groq.com/openai/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+  model: process.env.OPENROUTER_MODEL || "openrouter/auto", // openrouter/auto or a specific free model
+  baseUrl: "https://openrouter.ai/api/v1",
 };
