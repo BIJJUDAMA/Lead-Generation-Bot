@@ -33,6 +33,7 @@ export class ScoringService {
       .select({
         id: signals.id,
         classification: signalAnalysis.classification,
+        confidence: signalAnalysis.confidence,
         summary: signalAnalysis.summary,
         createdAt: signals.createdAt,
       })
@@ -83,7 +84,10 @@ export class ScoringService {
         const isRecent = signal.createdAt >= ninetyDaysAgo;
         const multiplier = isRecent ? RECENCY_MULTIPLIER.recent : RECENCY_MULTIPLIER.stale;
         
-        catScore += basePoints * multiplier;
+        // Incorporate AI confidence
+        const confidence = parseFloat(signal.confidence || "0.5");
+        
+        catScore += (basePoints * confidence) * multiplier;
       });
 
       // Apply cap
