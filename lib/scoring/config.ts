@@ -1,17 +1,17 @@
 export const SCORING_CONFIG = {
-  funding: { steps: [35, 15, 5], cap: 55 },
-  hiring: { steps: [30, 15, 10, 5], cap: 60 },
-  growth: { steps: [20, 10, 5], cap: 35 }
+  funding: { steps: [50, 25, 10], cap: 100 },
+  hiring: { steps: [40, 20, 15, 10], cap: 100 },
+  growth: { steps: [30, 15, 10], cap: 75 }
 };
 
 export const RECENCY_MULTIPLIER = {
   recent: 1.0, // <= 90 days
-  stale: 0.5   // > 90 days
+  stale: 0.8   // > 90 days
 };
 
 export const TIER_THRESHOLDS = {
-  high: 75,
-  medium: 40
+  high: 60,
+  medium: 30
 };
 
 /**
