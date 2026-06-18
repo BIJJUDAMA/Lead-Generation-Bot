@@ -2,19 +2,19 @@
   "crons": [
     {
       "path": "/api/cron/discovery",
-      "schedule": "0 0,6,12,18 * * *"
+      "schedule": "0 0 * * *"
     },
     {
       "path": "/api/cron/enrichment",
-      "schedule": "30 0,6,12,18 * * *"
+      "schedule": "30 0 * * *"
     },
     {
       "path": "/api/cron/scoring",
-      "schedule": "0 1,7,13,19 * * *"
+      "schedule": "0 1 * * *"
     },
     {
       "path": "/api/cron/cleanup",
-      "schedule": "0 0 * * 0"
+      "schedule": "0 2 * * *"
     }
   ]
 }
